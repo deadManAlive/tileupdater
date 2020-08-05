@@ -1,2 +1,4 @@
-PAT/
+.vscode/
 cache/
+target/
+__pycache__/
