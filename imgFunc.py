@@ -3,7 +3,7 @@
 #   and croping and resizing(imageCnR)  #
 #########################################
 
-import os, PIL
+import os, PIL, subprocess, re
 from PIL import Image
 
 def renamer(pather):
@@ -24,6 +24,16 @@ def imageCnR(img, src, tgt):
     width, height = im.size
     cwidth, cheight = min(im.size), min(im.size)
     im.crop(((width - cwidth) // 2, (height - cheight) // 2, (width + cwidth) // 2, (height + cheight) // 2)).save(os.path.join(tgt, img), quality = 95)
+
+def PhotosAppSeeker():
+    subprocess.call('powershell.exe Get-AppxPackage -Name "Microsoft.Windows.Photos" >appsDir.txt', shell=True)
+    paDetails = open(os.path.join(os.getcwd(), r'appsDir.txt'))
+    installLocation = ''
+    for line in paDetails:
+        dirSeek = re.search("\AInstallLocation", line)
+        if dirSeek:
+            _,installLocation = line.strip().split(' : ')
+    return installLocation
 
 def stopper():
     raise SystemExit

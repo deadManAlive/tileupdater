@@ -1,10 +1,15 @@
-from imgFunc import renamer, imageCnR, stopper
-import os, shutil
+from imgFunc import renamer, imageCnR, stopper, PhotosAppSeeker
+import os, shutil, subprocess
 
 
 path = os.path.join(os.environ['USERPROFILE'], 'Pictures')
 
 cache, target = os.path.join(os.getcwd(), r'cache'), os.path.join(os.getcwd(), r'target')
+
+realT = PhotosAppSeeker()
+realT = os.path.join(realT, 'LocalState', 'PhotosAppTile')
+print(realT)    ###THIS IS NOT THE DIR WE LOOKING FOR ###
+print(os.path.exists(realT))
 
 if not os.path.exists(cache):
     os.makedirs(cache)
