@@ -1,12 +1,11 @@
-from imgFunc import renamer, imageCnR, stopper, PhotosAppSeeker
+import imgFunc
 import os, shutil, subprocess
-
 
 path = os.path.join(os.environ['USERPROFILE'], 'Pictures')
 
 cache= os.path.join(os.getcwd(), r'cache')
 
-target = PhotosAppSeeker()
+target = imgFunc.PhotosAppSeeker()
 for _,_,oldTiles in os.walk(target):
     if oldTiles:
         for oldTile in oldTiles:
@@ -27,9 +26,9 @@ for _, _, imgs in os.walk(cache):
 for image in files:
     shutil.copy(image, cache)
 
-renamer(cache)
+imgFunc.renamer(cache)
 
 cacheList = os.listdir(cache)
 
 for image in cacheList:
-    imageCnR(image, cache, target)
+    imgFunc.imageCnR(image, cache, target)

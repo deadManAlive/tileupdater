@@ -28,8 +28,12 @@ def imageCnR(img, src, tgt):
 def PhotosAppSeeker():
     appPrnt = os.path.join(os.environ['LOCALAPPDATA'], 'Packages')
     photosApp = [dr for dr in os.listdir(appPrnt) if re.search("\.Photos_", dr)]
-    appDir = os.path.join(appPrnt, photosApp[0], 'LocalState', 'PhotosAppTile')
-    return appDir
+    for sDir in photosApp:
+        appDir = os.path.join(appPrnt, sDir, 'LocalState', 'PhotosAppTile')
+        if os.path.isdir(appDir):
+            return appDir
+        else:
+            pass
 
 def stopper():
     raise SystemExit
