@@ -1,0 +1,9 @@
+{
+    "useLocalDir": true,
+    "cacheDir": "cache",
+    "targetDir": "target",
+    "picDirPaths": [
+        "C:/Users/root/Pictures/wpp/", 
+        "D:/pax aeterna"
+    ]
+}

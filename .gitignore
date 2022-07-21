@@ -1,0 +1,6 @@
+# files
+
+# folder
+.venv/**
+target/**
+cache/**
