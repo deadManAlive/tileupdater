@@ -1,5 +1,5 @@
 from genericpath import isdir
-import os, random, shutil
+import os, random, shutil, re
 import types
 from PIL import Image
 import json
@@ -23,6 +23,16 @@ def imageCropAndResize(img: str, src: str, tgt: str) -> None:
     width, height = imgobj.size
     cwidth = cheight = min(imgobj.size)
     imgobj.crop(((width - cwidth) // 2, (height - cheight) // 2, (width + cwidth) // 2, (height + cheight) // 2)).save(os.path.join(tgt, img))
+
+def PhotosAppSeeker() -> str:
+    appPrnt = os.path.join(os.environ['LOCALAPPDATA'], 'Packages')
+    photosApp = [dr for dr in os.listdir(appPrnt) if re.search("\.Photos_", dr)]
+    for sDir in photosApp:
+        appDir = os.path.join(appPrnt, sDir, 'LocalState', 'PhotosAppTile')
+        if os.path.isdir(appDir):
+            return appDir
+        else:
+            return None
 
 # main function
 if __name__ == "__main__":
