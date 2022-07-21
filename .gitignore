@@ -1,5 +1,6 @@
-.vscode/
-cache/
-target/
-__pycache__/
-appsDir.txt
+# files
+
+# folder
+.venv/**
+target/**
+cache/**
