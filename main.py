@@ -1,6 +1,5 @@
-from genericpath import isdir
+from asyncio.log import logger
 import os, random, shutil, re
-import types
 from PIL import Image
 import json
 
@@ -24,9 +23,9 @@ def imageCropAndResize(img: str, src: str, tgt: str) -> None:
     cwidth = cheight = min(imgobj.size)
     imgobj.crop(((width - cwidth) // 2, (height - cheight) // 2, (width + cwidth) // 2, (height + cheight) // 2)).save(os.path.join(tgt, img))
 
-def PhotosAppSeeker() -> str:
+def PhotosAppDirectory() -> str | None:
     appPrnt = os.path.join(os.environ['LOCALAPPDATA'], 'Packages')
-    photosApp = [dr for dr in os.listdir(appPrnt) if re.search("\.Photos_", dr)]
+    photosApp = [dr for dr in os.listdir(appPrnt) if re.search("\\.Photos_", dr)]
     for sDir in photosApp:
         appDir = os.path.join(appPrnt, sDir, 'LocalState', 'PhotosAppTile')
         if os.path.isdir(appDir):
@@ -38,12 +37,12 @@ def PhotosAppSeeker() -> str:
 if __name__ == "__main__":
     config = json.load(open("config.json"))
 
-    cwd = os.path.dirname(__file__);
+    cwd = os.path.dirname(__file__)
 
-    if config["useLocalDir"] == True:
+    if config["usePhotosAppDir"] is False:
         cache = os.path.join(cwd, config["cacheDir"])
         target = os.path.join(cwd, config["targetDir"])
-    elif config["useLocalDir"] == False:
+    elif config["usePhotosAppDir"] is True:
         cache = config["cacheDir"]
         target = config["targetDir"]
     else:
