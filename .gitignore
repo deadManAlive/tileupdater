@@ -1,6 +1,8 @@
 # files
+layout.xml
 
 # folder
 .venv/**
 target/**
 cache/**
+__pycache__/

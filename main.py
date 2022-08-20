@@ -1,37 +1,11 @@
-from asyncio.log import logger
-import os, random, shutil, re
-from PIL import Image
+import os
+import random
+import shutil
 import json
 
-# Rename a picture to compatible format
-def renamer(path: str) -> None:
-    i = 0
-    for img in os.listdir(path):
-        dst = "Tile" + str(i) + ".jpg"
-        src = os.path.join(path, img)
-        dst = os.path.join(path, dst)
-        os.rename(src, dst)
-        # print(src, dst)
-        i += 1
-
-# Crop image to square based on minimal dimension of the image
-def imageCropAndResize(img: str, src: str, tgt: str) -> None:
-    imgpath = os.path.join(src, img)
-    imgobj = Image.open(imgpath)
-    imgobj.thumbnail((1024, 1024))
-    width, height = imgobj.size
-    cwidth = cheight = min(imgobj.size)
-    imgobj.crop(((width - cwidth) // 2, (height - cheight) // 2, (width + cwidth) // 2, (height + cheight) // 2)).save(os.path.join(tgt, img))
-
-def PhotosAppDirectory() -> str | None:
-    appPrnt = os.path.join(os.environ['LOCALAPPDATA'], 'Packages')
-    photosApp = [dr for dr in os.listdir(appPrnt) if re.search("\\.Photos_", dr)]
-    for sDir in photosApp:
-        appDir = os.path.join(appPrnt, sDir, 'LocalState', 'PhotosAppTile')
-        if os.path.isdir(appDir):
-            return appDir
-        else:
-            return None
+from modules.dir import photosAppDirectory, renamer
+from modules.img import imageCropAndResize
+from modules.layout import reStart
 
 # main function
 if __name__ == "__main__":
@@ -39,14 +13,28 @@ if __name__ == "__main__":
 
     cwd = os.path.dirname(__file__)
 
+    """
+        if 'usePhotosAppDir' is `true`
+            -> 'target' is from 'PhotosAppDirectory()'
+            -> 'cache' is from cacheDir
+        else
+            -> 'target' and 'cache' from config.json
+
+        throw err if target and cache could not be found.
+    """
+
     if config["usePhotosAppDir"] is False:
+        print("[LOCAL MODE]")
         cache = os.path.join(cwd, config["cacheDir"])
         target = os.path.join(cwd, config["targetDir"])
     elif config["usePhotosAppDir"] is True:
-        cache = config["cacheDir"]
-        target = config["targetDir"]
+        print("[ON APP DIR]")
+        cache = os.path.join(cwd, config["cacheDir"])
+        target = photosAppDirectory()
+
+        print("Photos app tile folder found at {}.".format(target))
     else:
-        raise Exception("configuration 'useLocalDir' did not set correctly.")
+        raise Exception("`usePhotosAppDir` (bool) in `config.json` did not set correctly.")
 
     if not os.path.isdir(cache):
         os.mkdir(cache)
@@ -86,3 +74,5 @@ if __name__ == "__main__":
 
     for img in os.listdir(cache):
         imageCropAndResize(img, cache, target)
+
+    reStart(cwd)
