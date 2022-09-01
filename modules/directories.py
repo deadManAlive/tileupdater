@@ -16,7 +16,7 @@ def renamer(path: str) -> None:
 
 def photosAppDirectory() -> str:
     appPrnt = os.path.join(os.environ['LOCALAPPDATA'], 'Packages')
-    photosApp = [dr for dr in os.listdir(appPrnt) if re.search("\\.Photos_", dr)]
+    photosApp = [dr for dr in os.listdir(appPrnt) if re.search("\\.Windows.Photos_", dr)]
     for sDir in photosApp:
         appDir = os.path.join(appPrnt, sDir, 'LocalState', 'PhotosAppTile')
         if os.path.isdir(appDir):

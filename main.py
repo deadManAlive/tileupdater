@@ -3,9 +3,9 @@ import random
 import shutil
 import json
 
-from modules.dir import photosAppDirectory, renamer
-from modules.img import imageCropAndResize
-from modules.layout import reStart
+from modules.directories import photosAppDirectory, renamer
+from modules.images import imageCropAndResize
+from modules.layout import restart as rs # needs admin. priv.
 
 # main function
 if __name__ == "__main__":
@@ -75,4 +75,4 @@ if __name__ == "__main__":
     for img in os.listdir(cache):
         imageCropAndResize(img, cache, target)
 
-    reStart(cwd)
+    # rs(cwd)
